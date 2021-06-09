@@ -1,0 +1,17 @@
+chttpd is a simple httpd implemented i golang, but initialized by a c program and also it's request handling is delegated to c program
+
+1. build libapi.a (C source)
+cd chttpd/c
+gcc -Wall -c -o libapi.o api.c
+ar rcs libapi.a libapi.o 
+
+2. build chttpd.a (Go source)
+cd chttpd
+go build -buildmode=c-archive --ldflags '-extldflags "-static"' -o chttpd.a gx.io/cgo/chttpd
+
+3. build chttpd (C source)
+cd chttpd/c
+cp api.h ../          # without this copy, you will get error: "api.h" not found, in the next step.
+gcc -o chttpd main.c ../chttpd.a -L. -lpthread -lapi
+
+4. And now you can run chttpd, enjoy!
