@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../chttpd.h"
+#include "../libchttpd.h"
 
 int main(int argc, char* argv[]) {
 	GoString addr = {":8080", sizeof(":8080")};
