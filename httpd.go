@@ -11,6 +11,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
@@ -20,17 +22,22 @@ func main() {
 //export start_httpd
 func start_httpd(addr string) {
 	go func() {
-		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		router := httprouter.New()
+		router.GET("/", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 			io.WriteString(w, "Now that you see this, everything looks fine.")
 		})
 
-		http.HandleFunc("/set", func(w http.ResponseWriter, r *http.Request) {
+		router.GET("/set", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 			v := C.set()
 			fmt.Printf("%#V, %v\n", v, v)
 			io.WriteString(w, "You requested /set")
 		})
 
-		if err := http.ListenAndServe(addr, nil); err != nil {
+		router.GET("/get", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+			io.WriteString(w, "You requested /get")
+		})
+
+		if err := http.ListenAndServe(addr, router); err != nil {
 			log.Fatal("Can not start service")
 		}
 	}()
