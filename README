@@ -1,4 +1,4 @@
-chttpd is a simple httpd implemented i golang, but initialized by a c program and also it's request handling is delegated to c program
+chttpd is a simple httpd implemented with golang, but initialized by a c program and also it's request handling is delegated to c program
 
 build static linked app
 1. build libapi.a (C source)
