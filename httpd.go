@@ -11,6 +11,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"text/template"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -24,7 +25,8 @@ func start_httpd(addr string) {
 	go func() {
 		router := httprouter.New()
 		router.GET("/", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-			io.WriteString(w, "Now that you see this, everything looks fine.")
+			t := template.Must(template.ParseFiles("template/index.html"))
+			t.Execute(w, [...]string{"Basic routing support", "Support regex", "High performance", "Good documentation"})
 		})
 
 		router.GET("/set", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
