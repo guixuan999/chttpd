@@ -36,7 +36,8 @@ func start_httpd(addr string) {
 		})
 
 		router.GET("/get", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-			io.WriteString(w, "You requested /get")
+			//io.WriteString(w, "You requested /get")
+			w.Write([]byte("You requesed GET /get"))
 		})
 
 		if err := http.ListenAndServe(addr, router); err != nil {
