@@ -41,7 +41,7 @@ func start_httpd(addr string) {
 		})
 
 		if err := http.ListenAndServe(addr, router); err != nil {
-			log.Fatal("Can not start service")
+			log.Fatal(err)
 		}
 	}()
 

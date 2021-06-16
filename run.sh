@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # build libcjson.so
 cd c/cJSON
@@ -10,7 +10,7 @@ make
 # build libapi.so
 cd ../../
 mv cJSON/build/libcjson.so* ./
-gcc -shared -o libapi.so api.c -I. -L. -lcjson
+gcc -shared -o libapi.so api.c -I. -L. -lcjson -fPIC
 cp api.h ../
 
 # build libchttpd.so
