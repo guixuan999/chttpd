@@ -4,6 +4,7 @@ package main
 #cgo LDFLAGS: -L./c -lapi
 #include <unistd.h>
 #include "api.h"
+#include "stdlib.h"
 */
 import "C"
 import (
@@ -12,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"text/template"
+	"unsafe"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -31,13 +33,16 @@ func start_httpd(addr string) {
 
 		router.GET("/set", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 			v := C.set()
-			fmt.Printf("%#V, %v\n", v, v)
+			fmt.Printf("%T, %T, %v\n", v, int(v), v)
 			io.WriteString(w, "You requested /set")
 		})
 
 		router.GET("/get", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-			//io.WriteString(w, "You requested /get")
-			w.Write([]byte("You requesed GET /get"))
+			v := C.get_vars()
+			//fmt.Printf("%T, %T, %v\n", v, C.GoString(v), C.GoString(v))
+			w.Header().Add("Content-Type", "application/json")
+			w.Write([]byte(C.GoString(v)))
+			C.free(unsafe.Pointer(v))
 		})
 
 		if err := http.ListenAndServe(addr, router); err != nil {
