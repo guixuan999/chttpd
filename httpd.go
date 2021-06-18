@@ -10,10 +10,10 @@ import "C"
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"net/http"
-	"text/template"
 	"unsafe"
 
 	"github.com/julienschmidt/httprouter"
@@ -36,9 +36,23 @@ func main() {
 func start_httpd(addr string) {
 	go func() {
 		router := httprouter.New()
+
+		// serve files in ./static
+		router.NotFound = http.FileServer(http.Dir("static"))
+
 		router.GET("/", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+			v := C.get_vars()
+			defer C.free(unsafe.Pointer(v))
+
+			var vars debug_vars
+			err := json.Unmarshal([]byte(C.GoString(v)), &vars)
+			if err != nil {
+				fmt.Fprintln(w, "Error json.Unmarshal")
+				return
+			}
+
 			t := template.Must(template.ParseFiles("template/index.html"))
-			t.Execute(w, [...]string{"Basic routing support", "Support regex", "High performance", "Good documentation"})
+			t.Execute(w, vars)
 		})
 
 		router.POST("/set", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -50,6 +64,7 @@ func start_httpd(addr string) {
 				return
 			}
 
+			// check if "in" is well constructed JSON string
 			var vars debug_vars
 			err = json.Unmarshal(in, &vars)
 			if err != nil {
@@ -73,10 +88,10 @@ func start_httpd(addr string) {
 
 		router.GET("/get", func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 			v := C.get_vars()
+			defer C.free(unsafe.Pointer(v))
 			//fmt.Printf("%T, %T, %v\n", v, C.GoString(v), C.GoString(v))
 			w.Header().Add("Content-Type", "application/json")
 			w.Write([]byte(C.GoString(v)))
-			C.free(unsafe.Pointer(v))
 		})
 
 		if err := http.ListenAndServe(addr, router); err != nil {

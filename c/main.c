@@ -1,3 +1,8 @@
+/*
+  1. This is test program for libapi.so and libchttpd.so
+  2. libapi.so and libchttpd.so are linked in "guest C program"
+  3. This test program is an example for "guest C program" on how to use libapi.so and libchttpd.so
+*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
