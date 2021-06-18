@@ -1,5 +1,5 @@
 #define register_var(name, type, var) do_register_var(__FILE__, name, type, var)
-extern int set();
+extern int set_vars(char *);
 char* get_vars();
 
 // better use register_var instead of do_register_var

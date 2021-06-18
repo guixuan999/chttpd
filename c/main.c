@@ -10,8 +10,9 @@ int main(int argc, char* argv[]) {
 	
 	int int_param = 100;
 	register_var("int_param", "int", &int_param);
-	char * str_param = "wang hongyan";
-	register_var("str_param", "string", str_param);
+	char* str_param = malloc(strlen("wang hongyan") + 1);
+	memcpy(str_param, "wang hongyan", strlen("wang hongyan") + 1);
+	register_var("str_param", "string", &str_param);
 
 	int bool_param = 1;
 	register_var("bool_param", "bool", &bool_param);
