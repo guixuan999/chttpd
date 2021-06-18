@@ -1,11 +1,20 @@
 #!/bin/bash
 
 # build libcjson.so
-cd c/cJSON
-mkdir build
-cd build
-cmake ..
-make
+f1=c/libcjson.so
+f2=c/libcjson.so.1
+f3=c/libcjson.so.1.7.14
+if [ -f $f1 ] && [ -f $f2 ] && [ -f $f3 ]; then
+    cd c/cJSON
+    cd build
+    echo "$f1 exists, skip cJSON building"
+else
+    cd c/cJSON
+    mkdir build
+    cd build
+    cmake ..
+    make
+fi
 
 # build libapi.so
 cd ../../
