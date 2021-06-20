@@ -1,0 +1,13 @@
+li {
+    padding-top: 10px;
+}
+
+span[name="name"] {
+    color: blue;
+    font-size: larger;
+    font-style: italic;
+}
+
+span[name="type"], span[name="filename"] {
+    color:dimgrey;
+}
