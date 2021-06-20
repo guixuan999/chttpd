@@ -74,13 +74,14 @@ func start_httpd(addr string) {
 			}
 
 			c := C.CString(string(in))
+			fmt.Println(string(in))
 			defer C.free(unsafe.Pointer(c))
 			v := C.set_vars(c)
 			if int(v) == 1 {
 				fmt.Printf("C.set_vars returns %d\n", v)
 			} else {
 				w.WriteHeader(501)
-				io.WriteString(w, "Fail")
+				io.WriteString(w, "Fail, C.set_vars returns NONE-1")
 				return
 			}
 			io.WriteString(w, "OK")
