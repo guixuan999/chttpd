@@ -74,7 +74,6 @@ func start_httpd(addr string) {
 			}
 
 			c := C.CString(string(in))
-			fmt.Println(string(in))
 			defer C.free(unsafe.Pointer(c))
 			v := C.set_vars(c)
 			if int(v) == 1 {

@@ -89,17 +89,7 @@ $(document).ready(function(){
             else
                 alert("Error!!!");
         }).always(function(xhr, status, info) {
-            // refresh
-            $.get("/get", "", function(data, textStatus, jqXHR) {
-                for(let item of data) {
-                    if(item.src_filename == src_filename && item.var_name == var_name) {
-                        var_node.val(item.var);
-                        break;
-                    }
-                }
-            }).fail(function(xhr, status, info) {
-                console.log("get /get fail");
-            });
+            refresh();
         });
    });
 });
